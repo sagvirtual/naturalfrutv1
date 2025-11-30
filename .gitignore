@@ -1,0 +1,19 @@
+# Archivos de log
+*.log
+
+# directorios innecesarios
+*.zip
+*.tar
+*.gz
+*.sql
+*.img
+*.ini
+*.png
+*.jpeg
+*.jpg
+*.pdf
+*.rar
+*..svg
+uploads/
+temp/
+cache/

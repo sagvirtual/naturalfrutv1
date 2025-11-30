@@ -1,0 +1,17 @@
+<?php include('../f54du60ig65.php');
+
+/*  $id_caja = $_POST["id_caja"];
+ $id_camioneta = $_POST["id_camioneta"];
+ $det_entrada = $_POST["det_entrada"];
+ $val_entrada = $_POST["val_entrada"];
+ $val_salida = $_POST["val_salida"];
+ 
+ 
+ $sqlcaja = "INSERT INTO `caja` (id_caja, id_camioneta, det_entrada, val_entrada, val_salida) VALUES ('$id_caja', '$id_camioneta', '$det_entrada', '$val_entrada', '$val_salida');";
+ mysqli_query($rjdhfbpqj, $sqlcaja) or die(mysqli_error($rjdhfbpqj));
+ mysqli_close($rjdhfbpqj);
+  */
+echo("<script language='JavaScript' type='text/javascript'>");
+echo("location.href='../modules/caja'");
+echo("</script>");
+?>

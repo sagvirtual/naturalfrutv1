@@ -1,0 +1,276 @@
+<?php include('../f54du60ig65.php');
+include('../funciones/fun_ResHojaRut.php');
+
+$buscar = $_POST['buscar'];
+$pagina = $_POST['col'];
+$todos = $_POST['col'];
+
+$desde_date = $_POST['desde_date'];
+$hasta_date = $_POST['hasta_date'];
+
+function prparo($rjdhfbpqj, $usuapick)
+{
+
+    $sqlusuarios = mysqli_query($rjdhfbpqj, "SELECT * FROM usuarios Where id='$usuapick'");
+    if ($rowusuard = mysqli_fetch_array($sqlusuarios)) {
+
+        $preparo = $rowusuard['nom_contac'];
+    }
+    return $preparo;
+}
+
+?>
+<style>
+    .pagination-container {
+        max-width: 20cm;
+        margin: 0 auto;
+    }
+
+    /* Estilos de la paginación */
+    .pagination {
+        background-color: white;
+        list-style-type: none;
+        display: flex;
+        flex-wrap: wrap;
+        /* Esto permite que los elementos se muestren en varias líneas si es necesario */
+        justify-content: center;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .pagination li {
+        background-color: white;
+        margin-right: 5px;
+        margin-bottom: 20px;
+        /* Añadimos un margen inferior para separar los elementos verticalmente */
+        width: auto;
+        /* Cambiamos el ancho a automático para que se adapten al contenido */
+        white-space: nowrap;
+        /* Evita que el texto se divida en varias líneas */
+    }
+
+    .pagination li a {
+        color: #333;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .pagination li.active a {
+        background-color: #007bff;
+        color: #fff;
+        border: 1px solid #007bff;
+    }
+</style>
+<link href="../assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<!-- End Breadcrumbbar -->
+<!-- Start Contentbar -->
+<div class="contentbar">
+    <!-- Start row -->
+    <div class="row">
+        <!-- Start col -->
+        <div class="col-lg-12">
+            <div class="card m-b-30">
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="default-datatable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+
+
+                                    <th style="width: 80px;">Fecha</th>
+                                    <th style="width: 120px;" class="text-center">Nº&nbsp;Orden</th>
+                                    <th>Cliente</th>
+                                    <th>Preparo</th>
+                                    <th>Entrego</th>
+                                    <th>Localidad</th>
+                                    <th class="text-center">Saldo</th>
+                                    <th class="text-center">Venta</th>
+                                    <th class="text-center">Remito</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+
+
+                                $TAMANO_PAGINA = 2000;
+
+                                //examino la página a mostrar y el inicio del registro a mostrar
+
+                                //$pagina = $_GET["pagina"];
+
+                                if (!$pagina) {
+
+                                    $inicio = 0;
+
+                                    $pagina = 1;
+                                } else {
+
+                                    $inicio = ($pagina - 1) * $TAMANO_PAGINA;
+                                }
+
+
+                                if ($todos != "1") {
+                                    if (is_numeric($buscar)) {
+                                        $qlovus = "e.id = '$buscar' and";
+                                    } else {
+                                        $qlovus = "(u.nom_empr LIKE '%$buscar%' OR u.nom_contac LIKE '%$buscar%' OR u.address LIKE '%$buscar%' OR u.localidad LIKE '%$buscar%') and e.fecha BETWEEN '$desde_date' and '$hasta_date' and";
+                                    }
+                                }
+
+
+
+
+
+                                $sqlcategoriasba = mysqli_query($rjdhfbpqj, "SELECT e.id, e.fecha,e.id_hoja,e.id_usuarioclav, e.col, e.saldo, e.id_cliente, u.nom_empr, u.nom_contac, u.retira, u.zona, u.address, u.localidad, u.id as nuncliente
+FROM orden e 
+INNER JOIN clientes u 
+ON e.id_cliente = u.id
+Where $qlovus e.col = '8'");
+
+
+                                $num_total = mysqli_num_rows($sqlcategoriasba);
+                                $total_paginas = ceil($num_total / $TAMANO_PAGINA);
+                                //construyo la sentencia SQL			  
+                                $limit = " limit " . $inicio . "," . $TAMANO_PAGINA;
+
+
+
+
+
+
+                                $sqluorden = mysqli_query($rjdhfbpqj, "SELECT e.id, e.fecha,e.id_usuarioclav, e.id_hoja, e.col, e.saldo, e.id_cliente, u.nom_empr, u.nom_contac, u.retira, u.zona, u.address, u.localidad, u.id as nuncliente
+FROM orden e 
+INNER JOIN clientes u 
+ON e.id_cliente = u.id
+Where $qlovus e.col = '8'  ORDER BY `fecha`  DESC $limit
+");
+
+                                if (!$sqluorden) {
+                                    die('Error en la consulta: ' . mysqli_error($rjdhfbpqj));
+                                }
+
+                                //$sqluorden = mysqli_query($rjdhfbpqj, "SELECT * FROM orden Where  id LIKE '%$buscar%' and col = '8'  ORDER BY `orden`.`fecha`  ASC LIMIT 0, 10000");
+                                while ($rowuorden = mysqli_fetch_array($sqluorden)) {
+
+                                    $id_orden = $rowuorden["id"];
+                                    $id_cliente = $rowuorden["id_cliente"];
+                                    $saldo = $rowuorden["saldo"];
+                                    $id_hoja = $rowuorden["id_hoja"];
+                                    $usuapick = $rowuorden['id_usuarioclav'];
+
+
+                                    $id_ordencod = base64_encode($rowuorden["id"]);
+                                    $id_clientecod = base64_encode($rowuorden["id_cliente"]);
+
+                                    $colestado = $rowuorden['col'];
+
+                                    $nomclientes = $rowuorden['nom_empr'];
+                                    $nomnegocio = $rowuorden['nom_contac'];
+                                    $localidad = $rowuorden['localidad'];
+                                    $retiradcv = $rowuorden['retira'];
+                                    $zonaid = $rowuorden['zona'];
+
+
+                                    $sqlczona = mysqli_query($rjdhfbpqj, "SELECT * FROM zona Where id='$zonaid'");
+                                    if ($rowczona = mysqli_fetch_array($sqlczona)) {
+
+                                        $nombrezona = $rowczona['nombre'];
+                                    } else {
+                                        $nomclientes = "";
+                                        $nomnegocio = "";
+                                        $localidad = "";
+                                        $nombrezona = "";
+                                    }
+
+                                    $sqlpagdeufp = ${"sqlpagdeufp" . $id_cliente};
+                                    $rowpagdeufp = ${"rowpagdeufp" . $id_cliente};
+                                    $Idordenultima = ${"Idordenultima" . $id_cliente};
+                                    /* me fijo la ultima orden para anular el edide las anteriores */
+                                    $sqlpagdeufp = mysqli_query($rjdhfbpqj, "SELECT * FROM orden Where id_cliente = '$id_cliente'and col='8' ORDER BY `orden`.`id` DESC");
+                                    if ($rowpagdeufp = mysqli_fetch_array($sqlpagdeufp)) {
+                                        $Idordenultima = $rowpagdeufp['id'];
+                                    }
+
+                                    echo '
+                                          <tr>
+                                          <td style="color: black;">' . date('d/m/Y', strtotime($rowuorden["fecha"])) . '</td>
+                                          <td class="text-center" style="color: black;">';
+
+
+                                    if ($Idordenultima == $id_orden) {
+                                        echo '<a href="../nota_de_pedido/?jhduskdsa=' . $id_clientecod . '&orjndty=' . $id_ordencod . '&ref=1">';
+                                    } else {
+                                        echo '<a href="../nota_de_pedido/nota_de_pedido_pdf.php?jdhsknc=' . $id_ordencod . '"  target="_blank" tabindex="-1" title="PDF Nota de Pedido">';
+                                    }
+
+                                    echo ' <button type="button" class="btn btn-secondary" style="background-color: #EAE9E9;color: black; font-weight: bold;">Nº ' . $id_orden . '</button></td>   
+                                             </a>
+                                              <td>
+                                              ' . $nombrezona . ' - ' . $nomclientes . ' ' . $nomnegocio . '
+                                             </td>
+                                             <td>' . prparo($rjdhfbpqj, $usuapick) . '</td> 
+                                             <td>' . func_RespHojRut($rjdhfbpqj, $id_hoja) . '</td> 
+                                             <td>' . $localidad . '</td> 
+                                             <td style="text-align: right;">$' . number_format($saldo, 0, ',', '.') . '</td>
+                                           
+                                              <td class="text-center"><a href="../nota_de_pedido/nota_de_pedido_pdf.php?jdhsknc=' . $id_ordencod . '" class="btn btn-dark-rgba" target="_blank" tabindex="-1" title="PDF Nota de Pedido"><i class="dripicons-print"></i></a></td>
+                                              <td class="text-center"><a href="../nota_de_pedido/remito_pdf.php?jdhsknc=' . $id_ordencod . '" target="_blank" tabindex="-1" class="btn btn-dark-rgba" title="PDF Remito"><i class="dripicons-print"></i></a></td>
+                                            <td class="text-center">
+                                                <div class="button-list">';
+                                    if ($Idordenultima == $id_orden) {
+                                        echo '
+                                              
+                                                    <a href="../nota_de_pedido/?jhduskdsa=' . $id_clientecod . '&orjndty=' . $id_ordencod . '&ref=1" class="btn btn-success-rgba" title="Editar"><i class="ri-pencil-line"></i></a>';
+                                    }
+
+                                    echo ' </div>
+                                            </td>
+                                        </tr>';
+                                }
+                                ?>
+
+                            </tbody>
+                        </table>
+
+
+                        <div class="pagination-container">
+                            <ul class="pagination">
+                                <?php
+                                if (($pagina - 1) > 0) { ?>
+                                    <li> <a class="pagination-item" onclick="ajax_buscar('<?= $buscar ?>','<?= $desde_date ?>','<?= $hasta_date ?>','<?= $pagina - 1 ?>');">
+                                            << /a>
+                                    </li>
+                                    <?  }
+
+                                if ($total_paginas > 1) {
+                                    for ($i = 1; $i <= $total_paginas; $i++) {
+                                        if ($pagina == $i) { ?>
+                                            <li class="active"><a class="pagination-item" onclick="ajax_buscar('<?= $buscar ?>','<?= $desde_date ?>','<?= $hasta_date ?>','<?= $i ?>');"><?= $i ?></a></li>
+
+                                        <? } else { ?>
+                                            <li><a class="pagination-item" onclick="ajax_buscar('<?= $buscar ?>','<?= $desde_date ?>','<?= $hasta_date ?>','<?= $i ?>');"><?= $i ?></a></li>
+
+                                    <? }
+                                    }
+                                }
+
+                                if (($pagina + 1) <= $total_paginas) { ?>
+
+                                    <li> <a class="pagination-item" onclick="ajax_buscar('<?= $buscar ?>','<?= $desde_date ?>','<?= $hasta_date ?>','<?= $pagina + 1 ?>');">></a></li>
+                                <? }
+                                ?>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End col -->
+        <script src="../assets/plugins/datatables/jquery.dataTablesb.min.js"></script>
+        <script src="../assets/js/custom/custom-table-datatable.js"></script>

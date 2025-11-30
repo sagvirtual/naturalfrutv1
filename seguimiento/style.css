@@ -1,0 +1,393 @@
+body {
+    font: 400 15px/1.8 Nunito Sans, sans-serif;
+    color: #777;
+	background-color: #757575;
+  }
+ h1 {
+    color: white;
+    font-size: 20px;
+	
+ }
+
+ p {
+   
+   font-size: 17px;
+	line-height : 25px; 
+	
+ }
+ a:link, a:visited, a:active {
+            text-decoration:none;
+	 color: grey;
+        }fo
+
+
+  h3, h4 {
+    margin: 10px 0 30px 0;
+    letter-spacing: 10px;      
+    font-size: 20px;
+    color: white;
+  }
+
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;c
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+
+
+  .bg-1 {
+    background: #2d2d30;
+    color: #bdbdbd;
+  }
+  .bg-1 h3 {color: #fff;}
+  .bg-1 p {font-style: italic;}
+  .list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  .list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .thumbnail {
+    padding: 0 0 15px 0;
+    border: none;
+    border-radius: 0;
+  }
+  .thumbnail p {
+    margin-top: 15px;
+    color: #555;
+  }
+  .btn {
+	 font-size: 30px; 
+    padding: 10px 10px 10px 10px;
+    background-color: #333;
+    color: #f1f1f1;
+    border-radius: 0;
+    transition: .2s;
+  }
+  .btn:hover, .btn:focus {
+    border: 1px solid #333;
+    background-color: #fff;
+    color: #000;
+  }
+  .modal-header, h4, .close {
+    background-color: #333;
+    color: #fff !important;
+    text-align: center;
+    font-size: 30px;
+  }
+  .modal-header, .modal-body {
+    padding: 40px 50px;
+  }
+  .nav-tabs li a {
+    color: #777;
+  }
+  #googleMap {
+    width: 100%;
+    height: 400px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }  
+  .navbar {
+    font-family: 'Nunito Sans', sans-serif;
+    margin-bottom: 0;
+    background-color: #2d2d30;
+    border: 0;
+    font-size: 11px !important;
+    letter-spacing: 4px;
+    opacity: 0.9;
+  }
+  .navbar li a, .navbar .navbar-brand { 
+    color: #d5d5d5 !important;
+  }
+  .navbar-nav li a:hover {
+    color: #fff !important;
+  }
+  .navbar-nav li.active a {
+    color: #fff !important;
+    background-color: #29292c !important;
+  }
+  .navbar-default .navbar-toggle {
+    border-color: transparent;
+  }
+  .open .dropdown-toggle {
+    color: #fff;
+    background-color: #555 !important;
+  }
+  .dropdown-menu li a {
+    color: #000 !important;
+  }
+  .dropdown-menu li a:hover {
+    background-color: red !important;
+  }
+  footer {
+    background-color: #2d2d30;
+    color: #f5f5f5;
+    padding: 32px;
+  }
+  footer a {
+    color: #f5f5f5;
+  }
+  footer a:hover {
+    color: #777;
+    text-decoration: none;
+  }  
+  .form-control {
+    border-radius: 0;
+  }
+  textarea {
+    resize: none;
+  }
+#form {
+  width: 200px;
+  
+  height: 50px;
+}
+
+#form p {
+  text-align: center;
+}
+
+#form label {
+  font-size: 20px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  color: grey;
+}
+
+.clasificacion {
+	
+		position: absolute;
+	margin-left: 10px;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+label:hover,
+label:hover ~ label {
+  color: orange;
+}
+
+input[type="radio"]:checked ~ label {
+  color: orange;
+}
+
+
+.estrellas{
+font-size: 15pt;
+  color: orange;	
+	
+	
+	
+}
+.estrellasno{
+	font-size: 15pt;
+  color: dimgrey;	
+	
+	
+	
+}
+
+
+
+
+
+.form-input {
+  
+  margin-top: 10px;
+   width: 95%;
+    font-size:18px;
+    border:0;
+    border-bottom:1px  #55acee solid;
+    
+
+
+}
+
+
+  .boton_2{
+	  width: 100%;
+    text-decoration: none;
+    padding: 10px;
+    text-transform: uppercase;
+    font-size: 25px;
+    color: white;
+    background: rgb(2,0,36);
+background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  }
+  .boton_2:hover{
+    color: #9b0e0e;
+    background-color: #bc6355;
+    text-decoration: none;
+	  
+  }
+
+
+
+.btns {
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 22px;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+  display: inline-block;
+	  background-color: white;
+	width: 300px;
+}
+
+.btns:hover {
+  cursor: url(http://cur.cursors-4u.net/symbols/sym-1/sym46.cur), auto;
+}
+.blue {
+  color: #55acee;
+  border: 2px #55acee solid;
+}
+
+.blue:hover {
+  background-color: #55acee;
+  color: #fff
+}
+
+.bluecrear {
+	position: relative;
+	left: -11px;
+	width: 100%;
+	font-size: 15px; 
+    padding: 0px 2px 2px 2px;
+    background-color: white;
+    border-radius: 3;
+    transition: .2s;
+ color: #55acee;
+  border: 2px #55acee solid;
+height: 30px;
+}
+
+.bluecrear:hover {
+  background-color: #55acee;
+  color: #fff
+}
+
+
+
+
+
+
+  .boton_foto{
+	  width: 100%;
+    text-decoration: none;
+    padding: 10px;
+    text-transform: uppercase;
+
+  
+    font-size: 25px;
+    color: white;
+    background-color: black;
+  }
+  .boton_foto:hover{
+    color: #9b0e0e;
+    background-color: #bc6355;
+    text-decoration: none;
+  }
+
+.tituloscua{
+	margin: 0 auto; 
+	background-color: #55acee; 
+	width: 100%;
+	
+}
+.tablefume{
+	margin: 0 auto;
+	background-color: white; 
+	width: 100%;
+	-webkit-box-shadow: 0px 8px 8px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    0px 8px 8px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         0px 8px 8px 0px rgba(50, 50, 50, 0.75);
+	
+	
+}
+
+.camara {
+       display:block;
+font-size: 80pt;
+       color:#614000;
+       position: relative;
+	left: 300px;
+       top:-200px;
+       border-radius:50%;
+       line-height:80px;
+       text-align:center;
+       z-index:999;
+}
+       /* Estilo del área del input[file] */
+
+
+        input[type="file"] {
+			cursor: pointer;
+			    color:#614000;
+                height: 100px;
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 300px; 
+                z-index: 1000;
+			 
+        }
+
+
+
+.archivosopor {
+       display:block;
+font-size: 20pt;
+       color:blue;
+       position: relative;
+	
+     
+       border-radius:50%;
+       line-height:80px;
+       text-align:center;
+       z-index:999;
+}
+input[type="file"] {
+			cursor: pointer;
+			    color:blue;
+                height: 100px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 300px; 
+                z-index: 1000;
+			 
+        }
+
+imagenperfil{
+	visibility: hidden;
+	   left: 100px;
+position: absolute;
+       top:800px;
+       text-align:center;
+	
+	
+}
+
+
+
+
+

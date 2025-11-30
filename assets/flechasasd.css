@@ -1,0 +1,16 @@
+th {
+    cursor: pointer;
+  }
+
+  th.sort-med::after {
+    content: " \21F5";
+  }
+
+  th.sort-asc::after {
+    content: " \21CA";
+  }
+
+  th.sort-desc::after {
+    content: " \21C8";
+    /* Unicode arrow down */
+  }
