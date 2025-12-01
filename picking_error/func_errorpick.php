@@ -11,14 +11,18 @@
 }
 
 
-function selecterroomot($rjdhfbpqj, $id_orden, $id_producto)
+function selecterroomot($rjdhfbpqj, $id_orden, $id_producto, $tipo_usuario)
 {
-
+    if ($tipo_usuario != 30) {
+        $bloc = "disabled";
+    } else {
+        $bloc = "";
+    }
     $id_motivo_selv = error_picking($rjdhfbpqj, $id_orden, $id_producto);
 
     $comomilla = "'";
     echo '
-<select  class="form-select"  style="color:red;" name="id_resp_error' . $id_producto . '" id="id_resp_error' . $id_producto . '" onchange="guardarPickingMotivo(' . $comomilla . '' . $id_producto . '' . $comomilla . ')">
+<select  class="form-select"  style="color:red;" name="id_resp_error' . $id_producto . '" id="id_resp_error' . $id_producto . '" onchange="guardarPickingMotivo(' . $comomilla . '' . $id_producto . '' . $comomilla . ')" ' . $bloc . '>
    <option value="0"></option>';
 
     echo '<option value="99"';

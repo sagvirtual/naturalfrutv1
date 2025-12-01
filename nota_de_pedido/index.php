@@ -15,7 +15,7 @@ if ($tipo_usuario == "0" || $tipo_usuario == "33"  || $tipo_usuario == "1"  || $
     include('../funciones/dexuentoProduc.php');
     require_once('../funciones/func_ofertas.php');
     include('../funciones/func_vencactual.php');
-    if ($tipo_usuario == "30") {
+    if ($tipo_usuario == "30" || $tipo_usuario == "0") {
         include('../picking_error/func_errorpick.php');
     }
 
@@ -991,7 +991,7 @@ idcli: '.$id_clienteint.'
                         <div class="container mt-3">
                             <table class="table table-bordered table-sm">
                                 <thead>
-                                    <tr> <? if ($tipo_usuario == '30') { ?>
+                                    <tr> <? if ($tipo_usuario == '30' || $tipo_usuario == '0') { ?>
                                             <th style="text-align:center;width: 118px;">Errores</th>
                                         <? } ?>
                                         <? if ($colestado >= '2' && $tipo_usuario == '0' || $tipo_usuario == '33' || $tipo_usuario == '30') { ?>
@@ -1149,11 +1149,11 @@ idcli: '.$id_clienteint.'
                         
                         <tr>';
                                         //errores control
-                                        if ($tipo_usuario == '30') {
+                                        if ($tipo_usuario == '30' || $tipo_usuario == '0') {
 
                                             echo '
                                         <td  style="text-align:center;"> ';
-                                            echo '' . selecterroomot($rjdhfbpqj, $id_orden, $id_producto) . '';
+                                            echo '' . selecterroomot($rjdhfbpqj, $id_orden, $id_producto, $tipo_usuario) . '';
 
                                             echo '</td>';
                                         }
@@ -1515,6 +1515,17 @@ idcli: '.$id_clienteint.'
                                                     $id_ordenver = ' - Ven. Nº' . $id_orden;
                                                 }
                                                 ?>
+
+
+                            <?php if ($colestado == '5' ||  $tipo_usuario == '30') {
+                                if ($retiradcv == "1") {
+                                    $collisto = "6";
+                                } else {
+                                    $collisto = "7";
+                                }
+
+                                echo ' <div class="text-center" id="confrmar" style="width: 100%; text-aling:center;"><button type="button" class="btn btn-primary" onclick="ajax_cocontolr(' . $comilla . '' . $id_orden . '' . $comilla . ',' . $comilla . '' . $collisto . '' . $comilla . ')" tabindex="-1"> CONFIRMAR CONTROL</button></div><br><br>';
+                            } ?>
                             <table class="table table-bordered table-sm" style="bottom: 300px; <?= $noverpro ?>">
                                 <thead>
                                     <tr>
@@ -1930,15 +1941,7 @@ idcli: '.$id_clienteint.'
                                                                 include('histfaltante.php');
                                                             }
 
-                                                            if ($colestado == '5') {
-                                                                if ($retiradcv == "1") {
-                                                                    $collisto = "6";
-                                                                } else {
-                                                                    $collisto = "7";
-                                                                }
 
-                                                                echo ' <div id="confrmar"></div><button type="button" class="btn btn-primary" onclick="ajax_cocontolr(' . $comilla . '' . $id_orden . '' . $comilla . ',' . $comilla . '' . $collisto . '' . $comilla . ')" tabindex="-1"> CONFIRMAR CONTROL</button>        &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;';
-                                                            }
 
                     ?>
 
