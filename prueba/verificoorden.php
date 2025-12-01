@@ -1,7 +1,7 @@
 <?php include('../f54du60ig65.php'); ?>
 <form action="verificoorden.php" method="post">
     <input type="date" name="fecha" id="fecha" value="<?= $fechahoy ?>">
-    <button type="submit">Enviar</button>
+    <button type="submit">Enviar..</button>
 
 
 </form>

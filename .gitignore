@@ -8,12 +8,10 @@
 *.sql
 *.img
 *.ini
-*.png
-*.jpeg
-*.jpg
 *.pdf
 *.rar
-*..svg
+*.svg
 uploads/
 temp/
 cache/
+.DS_Store
