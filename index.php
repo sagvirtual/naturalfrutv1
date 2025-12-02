@@ -505,6 +505,28 @@ function canconfold($rjdhfbpqj)
             <?
                     }
             ?>
+            <? if ($tipo_usuario == "0" || $tipo_usuario == "33") { ?>
+
+
+                <div class="col-lg-12 col-xl-4">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <a href="/reportecontroles/" target="_parent">
+                                    <li class="media">
+                                        <span class="iconbar iconbar-md bg-primary text-white rounded align-self-center mr-3"><i class="dripicons-graph-line"></i></span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-1 font-16">Reporte Controles de Pedidos</h5>
+                                            <p class="mb-0">Ingresar</p>
+                                        </div>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <? } ?>
+
 
         </div>
     <?
@@ -901,7 +923,7 @@ function canconfold($rjdhfbpqj)
                     </div>
                 </div>
             <? } ?>
-            <? if ($tipo_usuario == "0") { ?>
+            <? if ($tipo_usuario == "0" || $tipo_usuario == "33") { ?>
 
 
                 <div class="col-lg-12 col-xl-4">
@@ -923,7 +945,7 @@ function canconfold($rjdhfbpqj)
                 </div>
             <? } ?>
 
-            <? if ($tipo_usuario == "0") { ?>
+            <? if ($tipo_usuario == "0" || $tipo_usuario == "33") { ?>
 
 
                 <div class="col-lg-12 col-xl-4">
@@ -944,7 +966,7 @@ function canconfold($rjdhfbpqj)
                     </div>
                 </div>
             <? } ?>
-            <? if ($tipo_usuario == "0") { ?>
+            <? if ($tipo_usuario == "0" || $tipo_usuario == "33") { ?>
 
 
                 <div class="col-lg-12 col-xl-4">

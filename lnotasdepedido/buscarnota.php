@@ -3,6 +3,7 @@ include('../lusuarios/login.php');
 include('../funciones/entro_faltante.php');
 include('../funciones/fun_ResHojaRut.php');
 include('../funciones/funcHojaRuta.php');
+include('../funciones/func_control.php');
 
 
 $diaver = $_POST['diaver'];
@@ -349,28 +350,32 @@ function diadereparto($diaHoy, $dia_repart1, $dia_repart2, $dia_repart3, $dia_re
                                     }
                                     if ($colestado == '4') {
                                         $estadoorden = '<span class="badge" style="background-color: #678C35;color:white;">Pidiendo Productos
-                                            ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . ' <span class="dots"></span></span>';
+                                            ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . ' <span class="dots"></span></span>' . contrdespi($rjdhfbpqj, $id_orden) . '';
                                     }
                                     if ($colestado == '5') {
-                                        $estadoorden = '<span class="badge" style="background-color:#9000BA;color:white;">Controlando<span class="dots"></span><br>a ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</span>';
+                                        $estadoorden = '<span class="badge" style="background-color:#9000BA;color:white;">Controlando ' . controlo($rjdhfbpqj, $id_orden) . '
+                                        
+                                        </span>
+                                        <p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . ' </p>
+                                        ';
                                     }
                                     if ($colestado == '6') {
-                                        $estadoorden = '<span class="badge" style="background-color:#F0FF00;color:black;">Listo para Retiro</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:#F0FF00;color:black;">Listo para Retiro</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . ' ' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
                                     if ($colestado == '7') {
-                                        $estadoorden = '<span class="badge" style="background-color:#FFD500;color:black;">Listo para Despacho</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:#FFD500;color:black;">Listo para Despacho</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
                                     if ($colestado == '31') {
-                                        $estadoorden = '<span class="badge" style="background-color:green;color:white;">Entregadas</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:green;color:white;">Entregadas</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
                                     if ($colestado == '32') {
-                                        $estadoorden = '<span class="badge" style="background-color:red;color:white;">Cancelada</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:red;color:white;">Cancelada</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
                                     if ($colestado == '8') {
-                                        $estadoorden = '<span class="badge" style="background-color:black;color:white;">CONCRETADO</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:black;color:white;">CONCRETADO</span> <br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
                                     if ($colestado == '9') {
-                                        $estadoorden = '<span class="badge" style="background-color:black;color:white;">Ruta de Entrega </span><br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '</p>';
+                                        $estadoorden = '<span class="badge" style="background-color:black;color:white;">Ruta de Entrega </span><br><p style="font-size: 10pt;">Preparo ' . NomPickin($rjdhfbpqj, $id_usuarioclav) . '' . controlodes($rjdhfbpqj, $id_orden) . '</p>';
                                     }
 
                                     //extrigo nombre de la camioneta
@@ -685,9 +690,16 @@ function diadereparto($diaHoy, $dia_repart1, $dia_repart2, $dia_repart3, $dia_re
     }
 </script>
 
-
+<?php
+$porcontro = controloPorsen($rjdhfbpqj, $id_orden);
+?>
 <script>
     function ajax_cocontolr(iditem, confirmado) {
+
+        if (<?= $porcontro ?> != 100) {
+            alert("Falta Productos por Controlar!!");
+            return;
+        }
 
         // Pedir confirmación digitando el iditem
         let ingreso = prompt("Para confirmar el Control, ingrese el número Pedido");

@@ -18,6 +18,7 @@ if ($tipo_usuario == "0" || $tipo_usuario == "33"  || $tipo_usuario == "1"  || $
     if ($tipo_usuario == "30" || $tipo_usuario == "0") {
         include('../picking_error/func_errorpick.php');
     }
+    include('../funciones/func_control.php');
 
 
     if ($tipo_usuario == "30") {
@@ -1517,7 +1518,10 @@ idcli: '.$id_clienteint.'
                                                 ?>
 
 
-                            <?php if ($colestado == '5' ||  $tipo_usuario == '30') {
+                            <?php
+                            $porcontro = controloPorsen($rjdhfbpqj, $id_orden);
+
+                            if ($colestado == '5' ||  $tipo_usuario == '30') {
                                 if ($retiradcv == "1") {
                                     $collisto = "6";
                                 } else {
@@ -2943,7 +2947,12 @@ idcli: '.$id_clienteint.'
         <script>
             function ajax_cocontolr(iditem, confirmado) {
 
-                // Pedir confirmación digitando el iditem
+                if (<?= $porcontro ?> != 100) {
+                    alert("Falta Productos por Controlar!!");
+                    return;
+                }
+
+                // Pedir confirmación digitando el iditem  $porcontro
                 let ingreso = prompt("Para confirmar el Control, ingrese el número Pedido " + iditem);
 
                 // Si cancela el prompt
