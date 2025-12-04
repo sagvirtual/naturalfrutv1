@@ -4,6 +4,17 @@ include('../listadeprecio/func_fechalista.php');
 include('../cajadiaria/fun_idcuenta.php');
 include('../funciones/func_formapago.php');
 include('backorden.php');
+
+
+$oferta = 0;
+$cantmaxOferta = 0;
+$unidadOferta = 0;
+$stockhistorial = 0;
+$multiploes = 0;
+$limite = 0;
+$forzadoprecio = 0;
+$porsentajeOferta = 0;
+
 if ($tipo_usuario == "0" || $tipo_usuario == "33"  || $tipo_usuario == "1"  || $tipo_usuario == "3" || $tipo_usuario == "30") {
     include('funcion_saldoanterior.php');
     include('../control_stock/funcionStockSnot.php');
@@ -1198,8 +1209,7 @@ idcli: '.$id_clienteint.'
                                       <td style="padding-left: 2mm;' . $fondotd . '">
                       <select  id="unidad' . $roworden['id'] . '" class="form-select" tabindex="-1"
                       
-                      onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val()); ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                        caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())" 
+                      onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val()); ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());" 
                         
                             
                                        onblur="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"
@@ -1214,34 +1224,13 @@ idcli: '.$id_clienteint.'
                         <td  style="text-align:center;' . $fondotd . '">   
                         <input type="number" id="cantidad' . $roworden['id'] . '" value="' . $roworden['kilos'] . '"  class="form-control"  min="0" 
                           
-                        onkeyup="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-
-
-                             ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-
-                        caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())"  
-                        onKeyDown="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                      caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val())"  
+                        onkeyup="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val()); ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"  
+                        onKeyDown="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"  
   
-                        onKeyPress="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                         
-                              
-                              
-                              caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())"  
+                        onKeyPress="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"  
 
-                          onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-
-
-                             ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-
-                             caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())"  
-                        
-                              
-                          
-                                       onblur="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"
-
-
-                        onclick="select()"  style="text-align:center;" >
+                          onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val()); ajax_ventaminim' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"
+                          onblur="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"  onclick="select()"  style="text-align:center;" >
              
                      </td>
         
@@ -1251,23 +1240,14 @@ idcli: '.$id_clienteint.'
                     <input type="text"  id="improteun' . $roworden['id'] . '" value="' . $roworden['precio'] . '" class="form-control" style="text-align:right;"  disabled></td>
 
                       <td  style="text-align:center;' . $colordecuen . '; ' . $nomostraus30 . '"> 
-                    <input type="number"  id="descuenun' . $roworden['id'] . '" value="' . $roworden['descuenun'] . '" style="text-align:center;" class="form-control" min="0" max="100"  onkeyup="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                       onclick="select();" 
-
-               
-                      onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                   caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())" 
+                    <input type="number"  id="descuenun' . $roworden['id'] . '" value="' . $roworden['descuenun'] . '" style="text-align:center;" class="form-control" min="0" max="100"  
+                    onkeyup="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"
+                       
+                      onChange="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());" 
                     
-                    onKeyDown="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                  caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())"   
+                    onKeyDown="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"   
 
-                    onKeyPress="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());
-                  caltotalven($(' . $comillas . '#valoiva' . $comillas . ').val(),$(' . $comillas . '#desuniva' . $comillas . ').val(),$(' . $comillas . '#desuni' . $comillas . ').val(),$(' . $comillas . '#valdvp' . $comillas . ').val())"  
-                  
-                  
-
-                  
-                    
+                    onKeyPress="ajax_precios' . $roworden['id'] . '($(' . $comillas . '#cantidad' . $roworden['id'] . '' . $comillas . ').val(),$(' . $comillas . '#unidad' . $roworden['id'] . '' . $comillas . ').val());"   
                     onclick="select()" ' . $nomostrausin30 . '>
 
 
@@ -2947,7 +2927,7 @@ idcli: '.$id_clienteint.'
         <script>
             function ajax_cocontolr(iditem, confirmado) {
 
-                if (<?= $porcontro ?> != 100) {
+                if (<?= $porcontro ?> < 100) {
                     alert("Falta Productos por Controlar!!");
                     return;
                 }

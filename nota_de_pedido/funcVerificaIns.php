@@ -236,7 +236,7 @@ $totalres=$preciofin*$presentacion;
             $result = "2";
             if (
                 $idprodu == '403' || $idprodu == '1252' || $idprodu == '2045' || $idprodu == '2108' || $idprodu == '2177' || $idprodu == '1883' || $idprodu == '654'
-                || $idprodu == '535' || $idprodu == '860'  || $idprodu == '103' || $idprodu == '1672'
+                || $idprodu == '535' || $idprodu == '860'  || $idprodu == '103' || $idprodu == '1672' || $idprodu == '1319'
             ) {
                 $result = "1";
             }

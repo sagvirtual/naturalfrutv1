@@ -1,25 +1,25 @@
-<?php include('../f54du60ig65.php');
-// Aumentar memoria para InnoDB (en bytes)
-$rjdhfbpqj->query("SET GLOBAL innodb_buffer_pool_size = 1073741824"); // 1GB
-
-// Aumentar memoria para MyISAM (en bytes)
-$rjdhfbpqj->query("SET GLOBAL key_buffer_size = 536870912"); // 512MB
-
-// Aumentar memoria para operaciones temporales
-$rjdhfbpqj->query("SET GLOBAL tmp_table_size = 268435456"); // 256MB
-$rjdhfbpqj->query("SET GLOBAL max_heap_table_size = 268435456"); // 256MB
-
+<?php
+include('../f54du60ig65.php');
 include('../lusuarios/login.php');
 include('../nota_de_pedido/funcion_saldoanterior.php');
-include('../funciones/funcZonas.php');
-include('../funciones/funcContarVencimiento.php');
 
-$buscar = $_POST['buscar'];
+$buscar = isset($_POST['buscar']) ? trim($_POST['buscar']) : '';
 
 function ultimaboleta($rjdhfbpqj, $id_clienteint)
 {
+    // Antes no tenía LIMIT, puede hacerte pelota si hay muchas órdenes
+    $sqlpagdeufp = mysqli_query(
+        $rjdhfbpqj,
+        "SELECT id 
+         FROM orden 
+         WHERE id_cliente = '$id_clienteint' 
+           AND col != '8' 
+           AND col != '31' 
+           AND col != '32' 
+         ORDER BY id ASC 
+         LIMIT 1"
+    );
 
-    $sqlpagdeufp = mysqli_query($rjdhfbpqj, "SELECT * FROM orden Where  id_cliente = '$id_clienteint' and col !='8' and col !='31' and col !='32' ORDER BY `orden`.`id` ASC");
     if ($rowpagdeufp = mysqli_fetch_array($sqlpagdeufp)) {
         $totalresta = $rowpagdeufp["id"];
     } else {
@@ -28,8 +28,70 @@ function ultimaboleta($rjdhfbpqj, $id_clienteint)
     return $totalresta;
 }
 
+function Vencimiento($rjdhfbpqj, $id_clienteint)
+{
+    $sqlpagdeufp = mysqli_query(
+        $rjdhfbpqj,
+        "SELECT fecha 
+         FROM orden 
+         WHERE id_cliente = '$id_clienteint'  
+           AND col = '8' 
+           AND fin = '1' 
+           AND finalizada = '1' 
+         ORDER BY fecha DESC 
+         LIMIT 1"
+    );
+    if ($rowpagdeufp = mysqli_fetch_array($sqlpagdeufp)) {
+        return $rowpagdeufp['fecha'];
+    } else {
+        return null;
+    }
+}
+
+// ==========================
+//  ARMAMOS EL WHERE
+// ==========================
+$where = "c.estado = '0'";
+
+if ($buscar !== '') {
+    $palabrascl = preg_split('/\s+/', $buscar);
+    $condicioncl = array();
+
+    foreach ($palabrascl as $palabracl) {
+        $palabracl = trim($palabracl);
+        if ($palabracl === '') continue;
+
+        $terminocl = '%' . mysqli_real_escape_string($rjdhfbpqj, $palabracl) . '%';
+        $condicioncl[] = "CONCAT(c.nom_empr, ' ', c.nom_contac, ' ', c.address) LIKE '$terminocl'";
+    }
+
+    if (!empty($condicioncl)) {
+        $where .= ' AND (' . implode(' AND ', $condicioncl) . ')';
+    }
+}
+
+// ==========================
+//  CONSULTA CLIENTES + ZONA
+// ==========================
+$sqlclientes = mysqli_query(
+    $rjdhfbpqj,
+    "SELECT 
+        c.id,
+        c.nom_empr,
+        c.nom_contac,
+        c.address,
+        z.nombre AS zona_nombre
+     FROM clientes AS c
+     LEFT JOIN zona AS z ON z.id = c.zona
+     WHERE $where
+     ORDER BY c.nom_contac ASC"
+);
+
+// total general de deuda
+$salgraltotal = 0.00;
 
 ?>
+
 <script>
     $('#default-datatable').DataTable({
         "order": [
@@ -38,21 +100,16 @@ function ultimaboleta($rjdhfbpqj, $id_clienteint)
         responsive: true
     });
 </script>
-<!-- End Breadcrumbbar -->
+
 <div class="contentbar">
-    <!-- Start row -->
     <div class="row">
-        <!-- Start col -->
         <div class="col-lg-12">
             <div class="card m-b-30">
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="default-datatable" class="table table-bordered table-striped">
-
                             <thead>
                                 <tr>
-                                    <!-- <th>Foto</th> -->
                                     <th style="width: 50px;" class="text-center">Zona</th>
                                     <th>Nombre</th>
                                     <th class="text-center">Ult. Compra</th>
@@ -62,95 +119,64 @@ function ultimaboleta($rjdhfbpqj, $id_clienteint)
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <?php
+                                $hoy = new DateTime(date('Y-m-d'));
 
-                                if ($buscar == "") {
-                                    $limit = '10000';
-                                } else {
-                                    $limit = '100';
-                                }
-
-
-                                //$buscar = mysqli_real_escape_string($rjdhfbpqj, $buscar);
-
-
-
-                                // Dividir la cadena de búsqueda en palabrascl
-                                $palabrascl = explode(' ', $buscar);
-
-                                // Crear un array para almacenar las condiciones de búsqueda para cada palabra
-                                $condicioncl = array();
-
-                                foreach ($palabrascl as $palabracl) {
-                                    // Reemplazar espacios con comodines para que coincida con cualquier palabra
-                                    $terminocl = '%' . str_replace(' ', '%', $palabracl) . '%';
-                                    // Agregar la condición para esta palabra al array
-                                    $condicioncl[] = "CONCAT(nom_empr, ' ', nom_contac, ' ',address) LIKE '$terminocl'";
-                                }
-
-                                // Unir todas las condiciones con el operador AND para asegurarse de que todas las palabrascl estén presentes
-                                $condicion_fincl = implode(' AND ', $condicioncl);
-
-
-
-
-
-
-                                /* $sqlclientes = mysqli_query($rjdhfbpqj, "SELECT * FROM clientes Where  nom_empr LIKE '%$buscar%' OR nom_contac LIKE '%$buscar%'ORDER BY nom_empr ASC"); */
-
-                                $sqlclientes = mysqli_query($rjdhfbpqj, "SELECT nom_empr,address,id,nom_contac FROM clientes Where  $condicion_fincl  and estado='0'");
-
-                                while ($rowclientes = mysqli_fetch_array($sqlclientes)) {
+                                while ($rowclientes = mysqli_fetch_assoc($sqlclientes)) {
 
                                     $id_clienteint = $rowclientes["id"];
-                                    $salgral = ${"salgral" . $id_clienteint};
-                                    $idorden = ${"salgral" . $id_clienteint};
                                     $id_clientecod = base64_encode($id_clienteint);
 
+                                    // ID límite para calculodeuda
                                     $totalresta = ultimaboleta($rjdhfbpqj, $id_clienteint);
+
+                                    // SOLO una vez calculodeuda por cliente
                                     $salgral = calculodeuda($rjdhfbpqj, $id_clienteint, $totalresta);
-                                    $salgraltotal += calculodeuda($rjdhfbpqj, $id_clienteint, $totalresta);
+                                    $salgraltotal += $salgral;
+
+                                    // Última compra
                                     $fechaven = Vencimiento($rjdhfbpqj, $id_clienteint);
-                                    $nombrezona = NombreZona($rjdhfbpqj, $id_clienteint);
-                                    $diasven = diasvencitotal($rjdhfbpqj, $id_clienteint);
-                                    /* 
-                                    //$salgral=$salgral;
-                                    */
                                     if (!empty($fechaven)) {
                                         $fechave = date('d/m/Y', strtotime($fechaven));
                                     } else {
                                         $fechave = "";
                                     }
 
-                                    /*  $sqlpagdeufp = mysqli_query($rjdhfbpqj, "SELECT * FROM orden Where id_cliente = '$id_clienteint'  and col='8' and fin='1' and finalizada='1'");
-                                    if ($rowpagdeufp = mysqli_fetch_array($sqlpagdeufp)) { */
+                                    // Días vencidos (versión liviana de diasvencitotal)
+                                    $diasven = 0;
+                                    if (!empty($fechaven) && $salgral > 1) {
+                                        $fechaInicio = new DateTime(date('Y-m-d', strtotime($fechaven)));
+                                        $intervalo   = $fechaInicio->diff($hoy);
+                                        $totalven    = (int)$intervalo->days;
+
+                                        if ($totalven > 1) {
+                                            $diasven = $totalven;
+                                        } else {
+                                            $diasven = 0;
+                                        }
+                                    }
+
+                                    $nombrezona = $rowclientes["zona_nombre"];
 
                                     echo '
-                                          <tr>
-                                          <td style="color: black;"  class="text-center">' . $nombrezona . '</td>   
-                                          <td style="color: black;">' . $rowclientes["nom_contac"] . ' (' . $rowclientes["nom_empr"] . ')</td>   
-                                           <td scope="row"  class="text-center">' . $fechave . '</td>
-                                           <td scope="row"  class="text-center">' . intval($diasven) . '</td>
-                                          
-                                            <td  class="text-center">$' . number_format($salgral, 2, '.', ',') . '</td>
-                                            <td  class="text-center">
-                                            <a href="../deuda_clientes/debe_haber?jhduskdsa=' . $id_clientecod . '" target="_blank">
-                                            <button type="button" class="btn btn-outline-primary">Resumen de Cuenta</button></td>
-                                        </a>
+                                        <tr>
+                                            <td style="color: black;" class="text-center">' . $nombrezona . '</td>   
+                                            <td style="color: black;">' . $rowclientes["nom_contac"] . ' (' . $rowclientes["nom_empr"] . ')</td>   
+                                            <td scope="row" class="text-center">' . $fechave . '</td>
+                                            <td scope="row" class="text-center">' . intval($diasven) . '</td>
+                                            <td class="text-center">$' . number_format($salgral, 2, '.', ',') . '</td>
+                                            <td class="text-center">
+                                                <a href="../deuda_clientes/debe_haber?jhduskdsa=' . $id_clientecod . '" target="_blank">
+                                                    <button type="button" class="btn btn-outline-primary">Resumen de Cuenta</button>
+                                                </a>
+                                            </td>
                                         </tr>';
-                                    /* } */
                                 }
-
                                 ?>
-
                             </tbody>
                         </table>
-                        <?php
 
-                        if ($tipo_usuario == "0") {
-
-                        ?>
+                        <?php if ($tipo_usuario == "0") { ?>
                             <table style="float:right;">
                                 <tr>
                                     <td><b>Deuda Total</b> &nbsp;</td>
@@ -158,15 +184,15 @@ function ultimaboleta($rjdhfbpqj, $id_clienteint)
                                     <td style="width:105;"></td>
                                 </tr>
                             </table>
-                        <?php
+                        <?php } ?>
 
-                        }
-                        mysqli_close($rjdhfbpqj);
-                        ?>
+                        <?php mysqli_close($rjdhfbpqj); ?>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="../assets/plugins/datatables/jquery.dataTablesb.min.js"></script>
-        <script src="../assets/js/custom/custom-table-datatable.js"></script>
-        <!-- End col -->
+    </div>
+</div>
+
+<script src="../assets/plugins/datatables/jquery.dataTablesb.min.js"></script>
+<script src="../assets/js/custom/custom-table-datatable.js"></script>

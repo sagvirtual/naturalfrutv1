@@ -141,11 +141,75 @@ if ($tipo_usuario == "0") {
             //cuento con sin asig en facturacion
 
             $canvecaf = mysqli_num_rows($sqlfact);
+            //mes anterior sin concretar
+            $sqlfactcoants = mysqli_query(
+                $rjdhfbpqj,
+                "SELECT 
+                o.ivaporsen,
+                o.fecha,
+                o.ivaporsen,
+                o.id AS id_orden_o,
+                o.col,
+                f.fecha_accion,
+                f.emitida,
+                f.enviada,
+                f.quienfac,
+                f.id_orden
+             FROM orden o
+             INNER JOIN facturacion f
+                 ON o.id = f.id_orden
+             WHERE f.quienfac = '$quienfac'
+               AND o.ivaporsen > '0'
+               AND f.emitida = '0'
+               AND f.enviada = '0'
+               AND o.fecha >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+                AND o.fecha <  DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                AND o.col != '0' AND o.col != '8' AND o.col != '31'"
+            );
+            $canvecafants = mysqli_num_rows($sqlfactcoants);
+            if ($canvecafants > 0) {
+                $canantefas = '<b style="color:red;">' . $canvecafants . '</b>';
+            } else {
+                $canantefas = '<b>' . $canvecafants . '</b>';
+            }
+            //mes anterior
+            $sqlfactcoant = mysqli_query(
+                $rjdhfbpqj,
+                "SELECT 
+                o.ivaporsen,
+                o.fecha,
+                o.ivaporsen,
+                o.id AS id_orden_o,
+                o.col,
+                f.fecha_accion,
+                f.emitida,
+                f.enviada,
+                f.quienfac,
+                f.id_orden
+             FROM orden o
+             INNER JOIN facturacion f
+                 ON o.id = f.id_orden
+             WHERE f.quienfac = '$quienfac'
+               AND o.ivaporsen > '0'
+               AND f.emitida = '0'
+               AND f.enviada = '0'
+               AND o.fecha >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+                AND o.fecha <  DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                AND o.col = '8'"
+            );
+            $canvecafant = mysqli_num_rows($sqlfactcoant);
+            if ($canvecafant > 0) {
+                $canantefa = '<b style="color:red;">' . $canvecafant . '</b>';
+            } else {
+                $canantefa = '<b>' . $canvecafant . '</b>';
+            }
 
             if ($rowusfac = mysqli_fetch_array($sqlfact)) {
                 echo '
             <tr>
                 <td class="text-center">' . $rowusuarios["nom_contac"] . '</td>
+                <td class="text-center">' . $canantefas . '</td>
+                <td class="text-center">' . $canantefa . '</td>
                 <td class="text-center"><b><sinfac>' . $canvecaf . '</sinfac></b></td>
                 <td class="text-center"><b><sinfacds style="color:green;">' . $canvecafconcre . '</sinfacds></b></td>
             </tr>';
@@ -199,6 +263,69 @@ if ($tipo_usuario == "0") {
                AND f.fecha_accion >= '2025-04-01 00:00:00' and o.col='8'"
         );
 
+
+        //mes anterior sin
+        $sqlfactcoants = mysqli_query(
+            $rjdhfbpqj,
+            "SELECT 
+                o.ivaporsen,
+                o.fecha,
+                o.ivaporsen,
+                o.id AS id_orden_o,
+                o.col,
+                f.fecha_accion,
+                f.emitida,
+                f.enviada,
+                f.quienfac,
+                f.id_orden
+             FROM orden o
+             INNER JOIN facturacion f
+                 ON o.id = f.id_orden
+             WHERE f.quienfac = '0'
+               AND o.ivaporsen > '0'
+               AND f.emitida = '0'
+               AND f.enviada = '0'
+             AND o.fecha >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+                AND o.fecha <  DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                AND o.col != '8' AND o.col != '0' AND o.col != '30'"
+        );
+        $canvecafants = mysqli_num_rows($sqlfactcoants);
+        if ($canvecafants > 0) {
+            $canantefas = '<b style="color:red;">' . $canvecafants . '</b>';
+        } else {
+            $canantefas = '<b>' . $canvecafants . '</b>';
+        }
+        //mes anterior
+        $sqlfactcoant = mysqli_query(
+            $rjdhfbpqj,
+            "SELECT 
+                o.ivaporsen,
+                o.fecha,
+                o.ivaporsen,
+                o.id AS id_orden_o,
+                o.col,
+                f.fecha_accion,
+                f.emitida,
+                f.enviada,
+                f.quienfac,
+                f.id_orden
+             FROM orden o
+             INNER JOIN facturacion f
+                 ON o.id = f.id_orden
+             WHERE f.quienfac = '0'
+               AND o.ivaporsen > '0'
+               AND f.emitida = '0'
+               AND f.enviada = '0'
+             AND o.fecha >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+                AND o.fecha <  DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                AND o.col = '8'"
+        );
+        $canvecafant = mysqli_num_rows($sqlfactcoant);
+        if ($canvecafant > 0) {
+            $canantefa = '<b style="color:red;">' . $canvecafant . '</b>';
+        } else {
+            $canantefa = '<b>' . $canvecafant . '</b>';
+        }
         //sin facruainsert
         $fechaini = '2025-10-01';
         $cantiparfac = 0;
@@ -234,6 +361,8 @@ if ($tipo_usuario == "0") {
             <tr>
                 <td class="text-center">Sin Asignar 
                 </td>
+                <td class="text-center">' . $canantefas . '</td>
+                <td class="text-center">' . $canantefa . '</td>
                 <td class="text-center"><b><sinfacd id="resultado"></sinfacd></b></td>
                 <td class="text-center"><b style="color:green;">' . $canvecafconv . '</b></td>
             </tr>';
@@ -569,7 +698,7 @@ if ($tipo_usuario == "0") {
             </div>
 
             <!-- Start col -->
-            <div class="col-lg-12 col-xl-3" style="cursor: pointer;">
+            <div class="col-lg-12 col-xl-6" style="cursor: pointer;">
                 <div class="card m-b-20">
                     <div class="card-body">
                         <div class="ecom-dashboard-widget">
@@ -603,7 +732,9 @@ if ($tipo_usuario == "0") {
                                 <thead>
                                     <tr>
                                         <th scope="col" class="text-center">Realiza</th>
-                                        <th scope="col" class="text-center">Cant.<br>Facturas</th>
+                                        <th scope="col" class="text-center">Mes/Ant.<br>S/Concre.</th>
+                                        <th scope="col" class="text-center">Mes/Ant.<br>Concre.</th>
+                                        <th scope="col" class="text-center">Total<br>Facturas</th>
                                         <th scope="col" class="text-center">Ordenes<br>Concretadas</th>
                                     </tr>
                                 </thead>
@@ -619,13 +750,6 @@ if ($tipo_usuario == "0") {
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- End col -->
-
-
-            <!-- End col -->
-
-            <div class="col-lg-12 col-xl-3" style="cursor: pointer;">
                 <div class="card m-b-20">
                     <div class="card-body">
                         <div class="ecom-dashboard-widget">

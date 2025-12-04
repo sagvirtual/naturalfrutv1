@@ -23,19 +23,17 @@ unset($_SESSION['id_orden']); ?>
 
 
 <script>
-    let xhr; // Variable global para almacenar la solicitud activa
+    let xhr; // Variable global
 
     function ajax_buscar(buscar) {
         if (xhr) {
-            xhr.abort(); // Aborta la solicitud anterior si aún está en progreso
+            xhr.abort();
         }
 
-        /*   if (buscar.trim() === "") {
-        $("#resultadobuscar").html(""); // Si el campo de búsqueda está vacío, limpiar el resultado
-        return;resultadobuscarind
-    }
- */
         $("#resultadobuscarind").hide();
+        $("#resultadobuscar").html("");
+        mostrarContador(100); // inicia contador 10 segundos
+
         var parametros = {
             "buscar": buscar
         };
@@ -45,15 +43,15 @@ unset($_SESSION['id_orden']); ?>
             url: '../deuda_clientes/buscarclientes.php',
             type: 'POST',
             beforeSend: function() {
-                $("#resultadobuscar").html('<div style="text-align:center; position:relative; top:100px;"><img src="../assets/images/loader.gif" style="width: 60px; height:60px;"></div>');
+                $("#contadorCarga").show();
             },
             success: function(response) {
+                $("#contadorCarga").hide();
                 $("#resultadobuscar").html(response);
-
             },
             error: function(jqXHR, textStatus) {
                 if (textStatus !== "abort") {
-                    console.error("Error en la solicitud ", textStatus);
+                    $("#contadorCarga").html("<b style='color:red;'>Error en la carga</b>");
                 }
             }
         });
@@ -223,8 +221,33 @@ unset($_SESSION['id_orden']); ?>
 
     </div>
 </div>
+<script>
+    function mostrarContador(segundos) {
+        $("#segRestantes").text(segundos);
+        $("#contadorCarga").show();
 
+        let intervalo = setInterval(() => {
+            segundos--;
+            $("#segRestantes").text(segundos);
 
+            if (segundos <= 0) {
+                clearInterval(intervalo);
+                $("#contadorCarga").html("Casi listo, procesando...");
+            }
+        }, 1000);
+    }
+</script>
+<div id="contadorCarga"
+    style="
+        display:none;
+        text-align:center;
+        font-size:22px;
+        color:#0a58ca;
+        margin-top:30px;
+        font-weight:bold;
+     ">
+    Cargando datos... <span id="segRestantes">100</span>%
+</div>
 <div id="resultadobuscar"></div>
 <div id="resultadobuscarind">
     <?php

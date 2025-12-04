@@ -696,7 +696,7 @@ $porcontro = controloPorsen($rjdhfbpqj, $id_orden);
 <script>
     function ajax_cocontolr(iditem, confirmado) {
 
-        if (<?= $porcontro ?> != 100) {
+        if (<?= $porcontro ?> < 100) {
             alert("Falta Productos por Controlar!!");
             return;
         }

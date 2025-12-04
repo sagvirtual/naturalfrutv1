@@ -71,7 +71,31 @@ function cantidadordens($rjdhfbpqj, $desded, $hastad)
     }
     return $canveordex;
 }
+function iniciofin($rjdhfbpqj, $id_uscontrol, $desded, $hastad)
+{
+    $sqlodrddd = mysqli_query($rjdhfbpqj, "SELECT * FROM picking_error  WHERE id_control = '$id_uscontrol' AND fecha_accion >= '$desded' ORDER BY fecha_accion ASC");
+    if ($rowusuarios = mysqli_fetch_array($sqlodrddd)) {
+        $inicio = $rowusuarios['fecha_accion'];
+        $hora_forini  = date("H:i", strtotime($inicio)) . " hs.";
 
+        $inococs = "Inicio Control: " . $hora_forini;
+        $sqlo = mysqli_query($rjdhfbpqj, "SELECT * FROM picking_error  WHERE id_control = '$id_uscontrol' AND fecha_accion <= '$hastad' ORDER BY fecha_accion DESC");
+        if ($rowusuaridos = mysqli_fetch_array($sqlo)) {
+            $fin = $rowusuaridos['fecha_accion'];
+
+            $hora_fofin  = date("H:i", strtotime($fin)) . " hs.";
+
+
+            $finc = "<br>Ultimo Control:" . $hora_fofin;
+        }
+    } else {
+        $inococs = '';
+        $finc = "";
+    }
+
+
+    return $inococs . $finc;
+}
 
 
 if ($tipo_usuario == "0") {
@@ -133,7 +157,7 @@ if ($tipo_usuario == "0") {
 
                     $id_usuarioclav = $rowusuarios['id'];
                     $nombre = strtoupper($rowusuarios['nom_contac']);
-
+                    $inciod = iniciofin($rjdhfbpqj, $id_usuarioclav, $desded, $hastad);
                     // ERRORES DE PICKING POR CONTROLADOR EN EL RANGO DE FECHAS
                     $sqlodrddd = mysqli_query(
                         $rjdhfbpqj,
@@ -184,6 +208,7 @@ if ($tipo_usuario == "0") {
                                 <div class="border-primary border rounded text-center py-3 mb-3">
                                     <h2 class="card-title text-dark mb-1">Pedidos ' . number_format($canveorde, 0, ',', '.') . '</h2> 
                                     <p class="text-primary mb-0">' . number_format($canverifiddcafin, 0, ',', '.') . ' Items</p>
+                                    ' . $inciod . '
                                 </div>
                             </div>
                             <div class="col-6 col-lg-9">

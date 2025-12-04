@@ -55,7 +55,7 @@ function ultimaboleta($rjdhfbpqj, $id_clienteint)
                                 <?php
 
 
-                                $sqlclientes = mysqli_query($rjdhfbpqj, "SELECT nom_empr,address,id,nom_contac FROM clientes Where  id='$id_clienteint'  and estado='0'");
+                                $sqlclientes = mysqli_query($rjdhfbpqj, "SELECT nom_empr,address,id,nom_contac FROM clientes Where  id='$id_clienteint'  and estado='0' limit 2");
 
                                 while ($rowclientes = mysqli_fetch_array($sqlclientes)) {
 
