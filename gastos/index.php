@@ -51,10 +51,40 @@ if ($tipo_usuario == "0") {
     }
 
 
+    function trpreventa($rjdhfbpqj, $desde, $hasta, $id_rubro)
+    {
+        $sqlordenc = mysqli_query($rjdhfbpqj, "SELECT id_rubro,fecha,nota,valor FROM item_orden Where id_rubro >' 0'and id_rubro='$id_rubro' and fecha BETWEEN '$desde' AND '$hasta' ORDER BY fecha ASC");
+        while ($roworden = mysqli_fetch_array($sqlordenc)) {
+            $nota = $roworden['nota'];
+            $id_rubro = $roworden['id_rubro'];
+            $valor = number_format($roworden['valor'], 0, ',', '.');
+            $fechapago = $roworden['fecha'];
+
+            echo '
+    
+       <tr>
+          <td class="text-center">  ' . date('d/m/y', strtotime($fechapago)) . '</td>
+          <td>' . $nota . '</td>
+          <td class="text-center">$' . $valor . '</td>
+          </tr>';
+        }
+    }
+
+
     function totalgastos($rjdhfbpqj, $desde, $hasta, $id_rubro)
     {
         $valor = 0;
         $sqlordenc = mysqli_query($rjdhfbpqj, "SELECT valor,id_rubro FROM prodcom Where id_rubro >' 0' and id_rubro='$id_rubro' and fecha BETWEEN '$desde' AND '$hasta'");
+        while ($roworden = mysqli_fetch_array($sqlordenc)) {
+            $valor += $roworden['valor'];
+        }
+        return  $valor;
+    }
+
+    function preventa($rjdhfbpqj, $desde, $hasta, $id_rubro)
+    {
+        $valor = 0;
+        $sqlordenc = mysqli_query($rjdhfbpqj, "SELECT valor,id_rubro FROM item_orden Where id_rubro >' 0' and id_rubro='$id_rubro' and fecha BETWEEN '$desde' AND '$hasta'");
         while ($roworden = mysqli_fetch_array($sqlordenc)) {
             $valor += $roworden['valor'];
         }
@@ -865,7 +895,7 @@ if ($tipo_usuario == "0") {
                                         <?php
                                         $id_rubro = '14';
 
-                                        $totalinsumos = totalgastos($rjdhfbpqj, $desde, $hasta, $id_rubro);
+                                        $totalinsumos = preventa($rjdhfbpqj, $desde, $hasta, $id_rubro);
                                         echo '$' . number_format($totalinsumos, 0, ',', '.') . '';
 
 
@@ -897,7 +927,7 @@ if ($tipo_usuario == "0") {
                                 <tbody>
                                     <?php
 
-                                    trgastos($rjdhfbpqj, $desde, $hasta, $id_rubro);
+                                    trpreventa($rjdhfbpqj, $desde, $hasta, $id_rubro);
                                     ?>
 
                                 </tbody>

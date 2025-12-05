@@ -119,6 +119,7 @@ function compararFecha($fechahoja, $fechahoy, $fechadn)
 
                                     <?
                                     if ($tipo_usuario == "0" ||  $tipo_usuario == "37" || $tipo_usuario == "1") { ?>
+                                        <th class="text-center" style="width: 56px;">Nota</th>
                                         <th class="text-center" style="width: 56px;">Forma</th>
 
                                         <th class="text-center">Total OC</th>
@@ -152,7 +153,7 @@ function compararFecha($fechahoja, $fechahoy, $fechadn)
                                 }
 
 
-                                $sqluorden = mysqli_query($rjdhfbpqj, "SELECT e.id, e.dia, e.dia, e.fecha,e.fecha1, e.fechahoja, e.id_usuarioclav, e.col, e.saldo, e.saldoreal, e.id_cliente, e.fefecivo, e.fcheque, e.ftransfer, e.fdeposito, e.enviado, e.comment, e.tarea,e.tipoprov,e.quien,
+                                $sqluorden = mysqli_query($rjdhfbpqj, "SELECT e.id, e.dia, e.dia, e.fecha,e.fecha1, e.fechahoja, e.id_usuarioclav, e.col, e.saldo, e.saldoreal, e.id_cliente, e.fefecivo, e.fcheque, e.ftransfer,e.nota, e.fdeposito, e.enviado, e.comment, e.tarea,e.tipoprov,e.quien,
                                     u.empresa, u.address, u.retira, u.id as nunprove
                                     FROM ordencompra e 
                                     INNER JOIN proveedores u 
@@ -165,6 +166,7 @@ function compararFecha($fechahoja, $fechahoy, $fechadn)
                                 while ($rowuorden = mysqli_fetch_array($sqluorden)) {
 
                                     $id_orden = $rowuorden["id"];
+                                    $nota = $rowuorden["nota"];
                                     $retiradcv = $rowuorden["retira"];
                                     $enviado = $rowuorden["enviado"];
                                     $fechadn = $rowuorden["fechahoja"];
@@ -431,7 +433,15 @@ function compararFecha($fechahoja, $fechahoy, $fechadn)
                                     echo '<option value="1" >ESPERANDO FECHA</option> ';
                                     echo '<option value="8" ' . $seled8 . '>**FINALIZADO**</option>';
                                     echo ' </select>
-                                              </td>';
+                                              </td>
+                                              <td class="text-center">';
+                                    if ($tipo_usuario == "0" || $tipo_usuario == "1") {
+                                        echo '<textarea  type="text" id="nota' . $id_orden . '"  name="nota' . $id_orden . '" oninput="ajax_nota(' . $comilla . '' . $id_orden . '' . $comilla . ',$(' . $comilla . '#nota' . $id_orden . '' . $comilla . ').val());" style="background-color: #f5f5d3ff;text-align:center;">' . $nota . '</textarea>';
+                                    } else {
+
+                                        echo '<p style="color:red;"><b>' . $nota . '</b></p>';
+                                    }
+                                    echo ' </td> ';
                                     if ($tipo_usuario == "0" ||  $tipo_usuario == "37"  || $tipo_usuario == "1") {
                                         echo '
                                               <td class="text-center">
@@ -619,6 +629,28 @@ function compararFecha($fechahoja, $fechahoy, $fechadn)
             },
             success: function(response) {
                 $("#muestroorden4").html(response);
+            }
+        });
+    }
+
+    function ajax_nota(id_orden, nota) {
+
+
+        var parametros = {
+            "idorden": id_orden,
+            "nota": nota
+        };
+        $.ajax({
+            data: parametros,
+            url: '../orden_de_compra/nota.php',
+            type: 'POST',
+            beforeSend: function() {
+                $("#muestroorden4").html('');
+            },
+            success: function(response) {
+                $("#muestroorden4").html(response);
+                console.log("Nota: " + nota + "orden" + id_orden);
+
             }
         });
     }
